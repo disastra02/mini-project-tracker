@@ -15,7 +15,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $project = Project::with('tasks')->get();
+        $project = Project::with('tasks')->orderBy('id', 'DESC')->get();
 
         return new ProjectResource(true, 'Daftar data project', $project);
     }
@@ -63,6 +63,6 @@ class ProjectController extends Controller
         $project->tasks()->delete();
         $project->delete();
 
-        return new ProjectResource(true, 'Detail project berhasil dihapus', null);
+        return new ProjectResource(true, 'Project berhasil dihapus', null);
     }
 }

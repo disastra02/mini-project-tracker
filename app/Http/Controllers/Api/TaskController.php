@@ -87,7 +87,7 @@ class TaskController extends Controller
         $task->delete();
         $this->updateDataProject($project, $idProject);
 
-        return new TaskResource(true, 'Detail task berhasil dihapus', null);
+        return new TaskResource(true, 'Task berhasil dihapus', null);
     }
 
     private function updateDataProject(Project $project, int $idProject): void
@@ -104,7 +104,7 @@ class TaskController extends Controller
 
     private function kalkulasiProgress(int $idProject)
     {
-        $sisaProgress = 100 - $this->valueFirstTask;
+        $sisaProgress = 100;
         $totalProgressDone = 0;
 
         $totalTask = Task::where('projects_id', $idProject)
@@ -116,6 +116,8 @@ class TaskController extends Controller
             ->first();
 
         if ($bobotDua) {
+            // Jika ada bobot 2 / task no 1, maka dikurangi dengan nilai task 1
+            $sisaProgress -= $this->valueFirstTask;
             $nilaiProgressBobotDua = ($bobotDua->status == "Done")
                 ? ($totalTask == 0 ? 100 : $this->valueFirstTask) 
                 : 0;
@@ -167,7 +169,7 @@ class TaskController extends Controller
             return 'Draft';
         }
 
-        // Dalam soal tidak ada kondisi jika task salah satu berstatus draft
+        // Dalam soal nomer 4 tidak ada kondisi jika task salah satu berstatus draft
         // Maka disini saya set default NULL
         return NULL;
     }
